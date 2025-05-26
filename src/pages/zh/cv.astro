@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import CvTimeline from '../../components/ui/CvTimeline.astro'
+import { education, experiences, skills, publications } from '../../data/cv'
+import { useTranslations } from '../../i18n/utils'
+
+const currentLang = 'zh';
+const t = useTranslations(currentLang);
+---
+
+<Layout title={t('page.cv')} description={t('cv.description')}>
+	<div>
+		<h1 class='text-3xl font-bold mb-8'>{t('cv.title')}</h1>
+		<p class='text-lg mb-12'>{t('cv.description')}</p>
+
+		<!-- Education Section -->
+		{education.length > 0 && (
+			<section class='mb-12'>
+				<h2 class='text-2xl font-bold mb-6'>{t('cv.education')}</h2>
+				<CvTimeline elements={education} colored={true} />
+			</section>
+		)}
+
+		<!-- Experience Section -->
+		{experiences.length > 0 && (
+			<section class='mb-12'>
+				<h2 class='text-2xl font-bold mb-6'>{t('cv.experience')}</h2>
+				<CvTimeline elements={experiences} colored={true} />
+			</section>
+		)}
+
+		<!-- Skills Section -->
+		{skills.length > 0 && (
+			<section class='mb-12'>
+				<h2 class='text-2xl font-bold mb-6'>{t('cv.skills')}</h2>
+				<div class='space-y-4'>
+					{skills.map(skill => (
+						<div class='card bg-base-200'>
+							<div class='card-body'>
+								<h3 class='card-title'>{skill.title}</h3>
+								<p>{skill.description}</p>
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- Publications Section -->
+		{publications.length > 0 && (
+			<section class='mb-12'>
+				<h2 class='text-2xl font-bold mb-6'>{t('home.recent_publications')}</h2>
+				<div class='space-y-4'>
+					{publications.map(pub => (
+						<div class='card bg-base-200'>
+							<div class='card-body'>
+								<h3 class='card-title'>{pub.title}</h3>
+								<p class='text-sm'><strong>{t('common.authors')}:</strong> {pub.authors}</p>
+								<p class='text-sm'><em>{pub.journal}</em> • {pub.time}</p>
+								<p>{pub.abstract}</p>
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+	</div>
+</Layout>

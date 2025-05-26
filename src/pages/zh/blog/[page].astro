@@ -4,17 +4,18 @@ import Layout from '@/layouts/Layout.astro'
 import { trimExcerpt } from '@/lib/utils'
 import { template } from '@/settings'
 import { getCollection } from 'astro:content'
+import { useTranslations } from '../../../i18n/utils'
 
-export async function getStaticPaths({ paginate }): Promise<Astro.getStaticPathsResult> {
+export async function getStaticPaths({ paginate }) {
     const blogEntries = await getCollection("blog").catch(() => []);
 
     const posts = blogEntries
         .map(post => ({
             title: post.data.title,
             date: post.data.date,
-            badge: post.data.tags?.[0] || 'Blog',
+            badge: post.data.tags?.[0] || '博客',
             excerpt: trimExcerpt(post.data.excerpt),
-            slug: `${template.base}/blog/${post.id}`,
+            slug: `${template.base}/zh/blog/${post.id}`,
         }))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
@@ -22,12 +23,15 @@ export async function getStaticPaths({ paginate }): Promise<Astro.getStaticPaths
         pageSize: template.postPerPage,
     });
 }
+
+const currentLang = 'zh';
+const t = useTranslations(currentLang);
 const { page } = Astro.props
 ---
 
-<Layout title='Blog'>
+<Layout title={t('page.blog')} description={t('blog.description')}>
     <div>
-		<h1 class='text-3xl font-bold mb-8'>Blog Posts</h1>
+		<h1 class='text-3xl font-bold mb-8'>{t('blog.title')}</h1>
 		<div class='grid gap-8'>
 			{
 				page.data.map(post => (
@@ -44,30 +48,18 @@ const { page } = Astro.props
 								</div>
 							</div>
 							<time datetime={post.date} class='text-sm text-base-content/71'>
-								{new Date(post.date).toLocaleDateString('en-US', {
+								{new Date(post.date).toLocaleDateString('zh-CN', {
 									year: 'numeric',
 									month: 'long',
 									day: 'numeric',
 								})}
 							</time>
-							<p class='mt-4'>{post.excerpt}</p>
-							<div class='card-actions justify-end'>
-								<a
-                            href={post.slug}
-									class='btn btn-sm btn-secondary text-secondary-content'
-								>
-									Read More
-								</a>
-							</div>
+							<p class='text-base-content/80'>{post.excerpt}</p>
 						</div>
 					</article>
 				))
 			}
 		</div>
-
-		<div class='flex justify-center mt-8'>
-			<Pagination page={page} />
-		</div>
-    </div>
-
+		<Pagination page={page} />
+	</div>
 </Layout>

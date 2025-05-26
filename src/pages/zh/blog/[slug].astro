@@ -1,0 +1,57 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import {template} from '@/settings'
+import {getCollection, render} from 'astro:content'
+import { useTranslations } from '../../../i18n/utils'
+
+export async function getStaticPaths() {
+    const blogEntries = await getCollection("blog").catch(() => []);
+
+    const posts = blogEntries
+        .map(post => {
+        const slug = post.id
+            return {
+            params: { slug },
+            props: { post },
+            }
+    })
+    return posts
+}
+
+const currentLang = 'zh';
+const t = useTranslations(currentLang);
+const {post} = Astro.props;
+const { title, date, tags} = post.data;
+const { Content } = await render(post);
+---
+
+<Layout title={title}>
+    <div>
+        <div class='mb-8'>
+            <a href={`${template.base}/zh/blog/1`} class='btn btn-ghost btn-sm mb-4'>
+                ← {t('common.back')}
+            </a>
+            <h1 class='text-3xl font-bold mb-4'>{title}</h1>
+            <div class='flex items-center gap-4 text-sm text-base-content/70 mb-6'>
+                <time datetime={date}>
+                    {t('blog.published_on')} {new Date(date).toLocaleDateString('zh-CN', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    })}
+                </time>
+                {tags && tags.length > 0 && (
+                    <div class='flex gap-2'>
+                        {tags.map(tag => (
+                            <span class='badge badge-accent badge-outline'>{tag}</span>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+
+        <article class='prose prose-lg max-w-none'>
+            <Content />
+        </article>
+    </div>
+</Layout>

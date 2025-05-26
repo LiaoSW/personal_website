@@ -3,13 +3,16 @@ import Layout from "@/layouts/Layout.astro";
 import { publications } from "@/data/cv";
 import { highlightAuthor } from "@/lib/utils";
 import {template} from "@/settings";
+import { useTranslations } from "../i18n/utils";
 
+const currentLang = 'en';
+const t = useTranslations(currentLang);
 const ALL_PAPERS = publications; // This will be replaced with dynamic data later
 ---
 
-<Layout title="Papers">
+<Layout title={t('page.papers')} description={t('papers.description')}>
   <div class="prose max-w-none">
-    <h1 class="text-3xl font-bold mb-8">Publications</h1>
+    <h1 class="text-3xl font-bold mb-8">{t('papers.title')}</h1>
 
     <div class="space-y-8">
       {
@@ -22,7 +25,7 @@ const ALL_PAPERS = publications; // This will be replaced with dynamic data late
                 </a>
               </h2>
               <p class="text-base mb-2">
-                <span class="font-medium">Authors:</span>{" "}
+                <span class="font-medium">{t('common.authors')}:</span>{" "}
                 <span set:html={highlightAuthor(paper.authors)} />
               </p>
               <p class="text-sm mb-3">
@@ -31,7 +34,7 @@ const ALL_PAPERS = publications; // This will be replaced with dynamic data late
               <p class="text-sm text-base-content/80">{paper.abstract}</p>
               <div class="card-actions justify-end mt-4">
                 <a href={paper.link} class="btn btn-sm btn-secondary text-secondary-content">
-                  Read Paper
+                  {t('common.read_more')}
                 </a>
               </div>
             </div>

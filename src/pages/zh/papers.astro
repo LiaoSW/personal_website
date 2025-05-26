@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import PublicationsList from '../../components/ui/PublicationsList.astro'
+import { publications } from '../../data/cv'
+import { useTranslations } from '../../i18n/utils'
+
+const currentLang = 'zh';
+const t = useTranslations(currentLang);
+---
+
+<Layout title={t('page.papers')} description={t('papers.description')}>
+	<div>
+		<h1 class='text-3xl font-bold mb-8'>{t('papers.title')}</h1>
+		<p class='text-lg mb-12'>{t('papers.description')}</p>
+		
+		<PublicationsList elements={publications} />
+	</div>
+</Layout>

@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Grid from '../../components/ui/Grid.astro'
+import { profile } from '../../settings'
+import { useTranslations } from '../../i18n/utils'
+
+const currentLang = 'zh';
+const t = useTranslations(currentLang);
+const { research_areas } = profile[currentLang]
+---
+
+<Layout title={t('page.research')} description={t('research.description')}>
+	<div>
+		<h1 class='text-3xl font-bold mb-8'>{t('research.title')}</h1>
+		<p class='text-lg mb-12'>{t('research.description')}</p>
+		
+		<Grid gridTitle={t('home.research_areas')} gridItems={research_areas} />
+	</div>
+</Layout>

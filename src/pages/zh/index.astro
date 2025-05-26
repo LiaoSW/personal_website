@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro'
+import Layout from '../../layouts/Layout.astro'
 
 import { profile } from '@/settings'
 import { publications } from '@/data/cv'
@@ -7,9 +7,9 @@ import ProfilePictures from '@/assets/profile_pictures.jpg'
 import Hero from '@/components/ui/Hero.astro'
 import Grid from '@/components/ui/Grid.astro'
 import ArticleList from '@/components/ui/ArticleList.astro'
-import { useTranslations } from '../i18n/utils'
+import { useTranslations } from '../../i18n/utils'
 
-const currentLang = 'en';
+const currentLang = 'zh';
 const t = useTranslations(currentLang);
 const { fullName, title, institute, research_areas, description } = profile[currentLang]
 

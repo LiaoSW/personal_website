@@ -3,10 +3,12 @@ import { ClientRouter } from 'astro:transitions';
 
 import BetterIcon from '../components/ui/BetterIcon.astro'
 import DarkLightController from '../components/ui/DarkLightController.astro'
+import LanguageSwitcher from '../components/ui/LanguageSwitcher.astro'
 import Navbar from '../components/ui/Navbar.astro'
 import Head from '../components/Head.astro'
 
 import { seo, profile, template } from '../settings'
+import { getLangFromUrl } from '../i18n/utils'
 import Footer from '../components/ui/Footer.astro'
 
 type Props = {
@@ -15,15 +17,19 @@ type Props = {
 	image?: string
 }
 
+const currentLang = getLangFromUrl(Astro.url);
+const currentProfile = profile[currentLang];
+const currentSeo = seo[currentLang];
+
 const {
-	title = seo.default_title,
-	description = seo.default_description,
-	image = seo.default_image,
+	title = currentSeo.default_title,
+	description = currentSeo.default_description,
+	image = currentSeo.default_image,
 } = Astro.props
 ---
 
 <!doctype html>
-<html lang='en'>
+<html lang={currentLang}>
 	<head>
 		{template.transitions && <ClientRouter /> }
 
@@ -61,10 +67,11 @@ const {
 							</label>
 						</div>
 						<div class='navbar-center lg:hidden text-lg font-black'>
-							{profile.title}
-							{profile.fullName}
+							{currentProfile.title}
+							{currentProfile.fullName}
 						</div>
 						<div class='navbar-end'>
+							<LanguageSwitcher />
 							{!template.menu_left &&
 								<DarkLightController/>
 							}

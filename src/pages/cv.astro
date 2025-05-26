@@ -6,6 +6,10 @@ import CvTimeline from '@/components/ui/CvTimeline.astro'
 import type { Experience, Education, Publication } from '../types/cv'
 import List from '@/components/ui/List.astro'
 import PublicationsList from '@/components/ui/PublicationsList.astro'
+import { useTranslations } from '../i18n/utils'
+
+const currentLang = 'en';
+const t = useTranslations(currentLang);
 
 let orderdExperiences: Experience[] = []
 let orderdEducations: Education[] = []
@@ -45,12 +49,12 @@ if (publications.length > 0) {
 }
 ---
 
-<Layout>
+<Layout title={t('page.cv')} description={t('cv.description')}>
 	{
 		orderdEducations.length > 0 && (
 			<section class='mb-12'>
 				<h2 class='text-2xl font-bold mb-6 border-b pb-2'>
-					Education
+					{t('cv.education')}
 				</h2>
 				<CvTimeline elements={orderdEducations} colored={true} />
 			</section>
@@ -61,7 +65,7 @@ if (publications.length > 0) {
 		orderdExperiences.length > 0 && (
 			<section class='mb-12'>
 				<h2 class='text-2xl font-bold mb-6 border-b pb-2'>
-					Experiences
+					{t('cv.experience')}
 				</h2>
 				<CvTimeline elements={orderdExperiences} colored={true} />
 			</section>
@@ -72,7 +76,7 @@ if (publications.length > 0) {
 		orderdEducations.length > 0 && (
 			<section class='mb-12'>
 				<h2 class='text-2xl font-bold mb-6 border-b pb-2'>
-					Last publications
+					{t('home.recent_publications')}
 				</h2>
 				<PublicationsList elements={orderedPublications}/>
 			</section>
@@ -82,7 +86,7 @@ if (publications.length > 0) {
 	{
 		skills.length > 0 && (
 			<section class='mb-12'>
-				<List listTitle='Skills' listItems={skills}/>
+				<List listTitle={t('cv.skills')} listItems={skills}/>
 			</section>
 		)
 	}

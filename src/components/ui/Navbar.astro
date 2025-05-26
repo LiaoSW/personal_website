@@ -5,10 +5,15 @@ import SocialIcons from './SocialIcons.astro'
 import ProfilePictures from '@/assets/profile_pictures.jpg'
 import { getCollection } from 'astro:content'
 import { template } from '@/settings'
+import { getLangFromUrl, useTranslations } from '../../i18n/utils'
 
-const isBlogPopulated = await getCollection('blog').then(collection => collection.length > 0)
+const isBlogPopulated = await getCollection('blog').then(collection => collection.length > 0).catch(() => false)
 
-const {fullName, title} = profile
+const currentLang = getLangFromUrl(Astro.url);
+const currentProfile = profile[currentLang];
+const t = useTranslations(currentLang);
+
+const {fullName, title} = currentProfile
 ---
 <aside
 	class='px-4 pt-4 h-screen w-[20rem] bg-base-200 text-base-content flex flex-col'
@@ -26,20 +31,20 @@ const {fullName, title} = profile
 			<div class='mx-4 mt-16'>
 				<ul class='space-y-4 menu grow shrink menu-md overflow-y-auto'>
 					<li>
-                        <a href=`${template.base}/` class='text-lg'>Home</a>
+                        <a href={currentLang === 'en' ? `${template.base}/` : `${template.base}/zh/`} class='text-lg'>{t('nav.home')}</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/research` class='text-lg'>Research</a>
+                        <a href={currentLang === 'en' ? `${template.base}/research` : `${template.base}/zh/research`} class='text-lg'>{t('nav.research')}</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/papers` class='text-lg'>Papers</a>
+                        <a href={currentLang === 'en' ? `${template.base}/papers` : `${template.base}/zh/papers`} class='text-lg'>{t('nav.papers')}</a>
 					</li>
 					<li>
-                        <a href=`${template.base}/cv` class='text-lg'>CV</a>
+                        <a href={currentLang === 'en' ? `${template.base}/cv` : `${template.base}/zh/cv`} class='text-lg'>{t('nav.cv')}</a>
                     </li>
                     {isBlogPopulated &&
 					<li>
-                        <a href=`${template.base}/blog/1` class='text-lg'>Blog</a>
+                        <a href={currentLang === 'en' ? `${template.base}/blog/1` : `${template.base}/zh/blog/1`} class='text-lg'>{t('nav.blog')}</a>
 </li>
                     }
 				</ul>

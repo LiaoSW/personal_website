@@ -3,12 +3,12 @@ import { seo } from "../settings";
 import { getCollection } from "astro:content";
 
 export async function GET(context) {
-    const blog = await getCollection("blog");
+    const blog = await getCollection("blog").catch(() => []);
     return rss({
         // `<title>` field in output xml
-        title: seo.default_title,
+        title: seo.en.default_title,
         // `<description>` field in output xml
-        description: seo.default_description,
+        description: seo.en.default_description,
         // Pull in your project "site" from the endpoint context
         // https://docs.astro.build/en/reference/api-reference/#site
         site: context.site,

@@ -4,13 +4,16 @@ import { profile } from "@/settings";
 import BetterIcon from "@/components/ui/BetterIcon.astro";
 import List from "@/components/ui/List.astro";
 import {RESEARCH_ICONS} from "@/data/researchIcons";
+import { useTranslations } from "../i18n/utils";
 
-const { research_areas } = profile;
+const currentLang = 'en';
+const t = useTranslations(currentLang);
+const { research_areas } = profile[currentLang];
 ---
 
-<Layout title="Research | Dr. Marie Curie">
+<Layout title={t('page.research')} description={t('research.description')}>
   <div class="prose max-w-none">
-    <h1 class="text-3xl font-bold mb-8">Research Statement</h1>
+    <h1 class="text-3xl font-bold mb-8">{t('research.title')}</h1>
 
     <div class="mb-12">
       <p class="text-lg mb-6">
