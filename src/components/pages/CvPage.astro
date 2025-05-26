@@ -1,0 +1,82 @@
+---
+// 简历页面组件 - 统一处理中英文版本
+import Layout from '@/layouts/Layout.astro'
+import { experiences, education, skills, publications } from '../../data/cv'
+import CvTimeline from '@/components/ui/CvTimeline.astro'
+import List from '@/components/ui/List.astro'
+import PublicationsList from '@/components/ui/PublicationsList.astro'
+import { getCurrentLang, useTranslations } from '../../i18n/utils'
+
+import type { Experience, Education, Publication } from '../../types/cv'
+
+// 动态获取当前语言
+const currentLang = getCurrentLang(Astro);
+const t = useTranslations(currentLang);
+
+// 数据排序处理
+let orderedExperiences: Experience[] = []
+let orderedEducations: Education[] = []
+let orderedPublications: Publication[] = []
+
+if (experiences) {
+  orderedExperiences = experiences.sort((a, b) => {
+    const dateA = new Date(a.startDate).getTime()
+    const dateB = new Date(b.startDate).getTime()
+    return dateB - dateA
+  })
+}
+
+if (education) {
+  orderedEducations = education.sort((a, b) => {
+    const dateA = new Date(a.startDate).getTime()
+    const dateB = new Date(b.startDate).getTime()
+    return dateB - dateA
+  })
+}
+
+if (publications) {
+  orderedPublications = publications.sort((a, b) => {
+    const dateA = new Date(a.time).getTime()
+    const dateB = new Date(b.time).getTime()
+    return dateB - dateA
+  })
+}
+---
+
+<Layout title={t('page.cv')} description={t('cv.description')}>
+  <div>
+    <h1 class="text-3xl font-bold mb-8">{t('cv.title')}</h1>
+    
+    <!-- 工作经历 -->
+    {orderedExperiences.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">{t('cv.experience')}</h2>
+        <CvTimeline elements={orderedExperiences} />
+      </div>
+    )}
+    
+    <!-- 教育背景 -->
+    {orderedEducations.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">{t('cv.education')}</h2>
+        <CvTimeline elements={orderedEducations} />
+      </div>
+    )}
+    
+    <!-- 技能 -->
+    {skills && skills.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">{t('cv.skills')}</h2>
+        <List listTitle="" listItems={skills} />
+      </div>
+    )}
+    
+    <!-- 发表论文 -->
+    {orderedPublications.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">{t('cv.publications')}</h2>
+        <PublicationsList elements={orderedPublications} />
+      </div>
+    )}
+  </div>
+</Layout>

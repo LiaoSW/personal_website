@@ -1,0 +1,111 @@
+---
+// 研究页面组件 - 统一处理中英文版本
+import Layout from '../../layouts/Layout.astro'
+import Grid from '../../components/ui/Grid.astro'
+import BetterIcon from '../../components/ui/BetterIcon.astro'
+import List from '../../components/ui/List.astro'
+import { profile } from '../../settings'
+import { RESEARCH_ICONS } from '../../data/researchIcons'
+import { getCurrentLang, useTranslations } from '../../i18n/utils'
+
+// 动态获取当前语言
+const currentLang = getCurrentLang(Astro);
+const t = useTranslations(currentLang);
+const { research_areas } = profile[currentLang]
+
+// 根据语言获取研究内容
+const researchContent = {
+  zh: {
+    intro: '我的研究专注于开创性的放射性研究和新放射性元素的发现。通过精密的实验技术和创新的方法论，我致力于推进我们对放射性现象及其在物理学和化学中应用的理解。',
+    approach: '这种跨学科的方法已经带来了重大发现，包括钋和镭的分离，为现代核物理学和放射化学的基础做出了贡献。',
+    projectsTitle: '当前项目',
+    projects: [
+      {
+        title: '放射性研究',
+        description: '研究铀矿物中的放射性特性并分离新的放射性元素。'
+      },
+      {
+        title: '测量技术',
+        description: '开发精确测量放射性发射及其特性的方法。'
+      }
+    ],
+    impactTitle: '研究影响',
+    impact: '我的研究开辟了放射性研究的新前沿，在科学研究和医学治疗中都有实际应用。这些发现彻底改变了我们对原子结构和放射性衰变过程的理解。'
+  },
+  en: {
+    intro: 'My research focuses on groundbreaking investigations into radioactivity and the discovery of new radioactive elements. Through meticulous experimental techniques and innovative methodologies, I aim to advance our understanding of radioactive phenomena and their applications in both physics and chemistry.',
+    approach: 'This interdisciplinary approach has led to significant discoveries, including the isolation of polonium and radium, contributing to the foundation of modern nuclear physics and radiochemistry.',
+    projectsTitle: 'Current Projects',
+    projects: [
+      {
+        title: 'Radioactivity Studies',
+        description: 'Investigation of radioactive properties in uranium minerals and isolation of new radioactive elements.'
+      },
+      {
+        title: 'Measurement Techniques',
+        description: 'Development of precise methods for measuring radioactive emissions and their properties.'
+      }
+    ],
+    impactTitle: 'Research Impact',
+    impact: 'My research has opened new frontiers in radioactivity studies, leading to practical applications in both scientific research and medical treatments. The discoveries have revolutionized our understanding of atomic structure and radioactive decay processes.'
+  }
+}
+
+const content = researchContent[currentLang]
+---
+
+<Layout title={t('page.research')} description={t('research.description')}>
+  <div class="prose max-w-none">
+    <h1 class="text-3xl font-bold mb-8">{t('research.title')}</h1>
+
+    <!-- 研究介绍 -->
+    <div class="mb-12">
+      <p class="text-lg mb-6">{content.intro}</p>
+      <p class="text-lg mb-6">{content.approach}</p>
+    </div>
+
+    <!-- 研究领域 -->
+    {research_areas && research_areas.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">{t('home.research_areas')}</h2>
+        <div class="grid gap-8">
+          {research_areas.map((area) => (
+            <div class="flex gap-6 items-start">
+              <BetterIcon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="2"
+                  class="size-6 stroke-accent"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d={RESEARCH_ICONS[area.field as keyof typeof RESEARCH_ICONS]?.path || RESEARCH_ICONS['computer-science'].path}
+                  />
+                </svg>
+              </BetterIcon>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">{area.title}</h3>
+                <p class="text-base">{area.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- 当前项目 -->
+    <List 
+      listTitle={content.projectsTitle} 
+      listItems={content.projects} 
+    />
+
+    <!-- 研究影响 -->
+    <div class="mt-12">
+      <h2 class="text-2xl font-bold mb-6">{content.impactTitle}</h2>
+      <p class="text-lg mb-6">{content.impact}</p>
+    </div>
+  </div>
+</Layout>

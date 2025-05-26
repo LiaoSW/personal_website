@@ -31,20 +31,20 @@ const {fullName, title} = currentProfile
 			<div class='mx-4 mt-16'>
 				<ul class='space-y-4 menu grow shrink menu-md overflow-y-auto'>
 					<li>
-                        <a href={currentLang === 'en' ? `${template.base}/` : `${template.base}/zh/`} class='text-lg'>{t('nav.home')}</a>
+                        <a href={currentLang === 'zh' ? `${template.base}/` : `${template.base}/en/`} class='text-lg'>{t('nav.home')}</a>
 					</li>
 					<li>
-                        <a href={currentLang === 'en' ? `${template.base}/research` : `${template.base}/zh/research`} class='text-lg'>{t('nav.research')}</a>
+                        <a href={currentLang === 'zh' ? `${template.base}/research` : `${template.base}/en/research`} class='text-lg'>{t('nav.research')}</a>
 					</li>
 					<li>
-                        <a href={currentLang === 'en' ? `${template.base}/papers` : `${template.base}/zh/papers`} class='text-lg'>{t('nav.papers')}</a>
+                        <a href={currentLang === 'zh' ? `${template.base}/papers` : `${template.base}/en/papers`} class='text-lg'>{t('nav.papers')}</a>
 					</li>
 					<li>
-                        <a href={currentLang === 'en' ? `${template.base}/cv` : `${template.base}/zh/cv`} class='text-lg'>{t('nav.cv')}</a>
+                        <a href={currentLang === 'zh' ? `${template.base}/cv` : `${template.base}/en/cv`} class='text-lg'>{t('nav.cv')}</a>
                     </li>
                     {isBlogPopulated &&
 					<li>
-                        <a href={currentLang === 'en' ? `${template.base}/blog/1` : `${template.base}/zh/blog/1`} class='text-lg'>{t('nav.blog')}</a>
+                        <a href={currentLang === 'zh' ? `${template.base}/blog/1` : `${template.base}/en/blog/1`} class='text-lg'>{t('nav.blog')}</a>
 </li>
                     }
 				</ul>

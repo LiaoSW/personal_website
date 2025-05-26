@@ -1,0 +1,142 @@
+---
+// 博客文章页面组件 - 统一处理中英文版本
+import Layout from '@/layouts/Layout.astro'
+import { getCurrentLang, useTranslations, getLocalizedPath } from '../../i18n/utils'
+
+// 接收文章数据作为props
+interface Props {
+  post: any; // 博客文章数据
+  Content: any; // Astro内容组件
+}
+
+const { post, Content } = Astro.props;
+
+// 动态获取当前语言
+const currentLang = getCurrentLang(Astro);
+const t = useTranslations(currentLang);
+
+// 根据语言格式化日期
+const formatDate = (date: string) => {
+  const dateObj = new Date(date);
+  if (currentLang === 'zh') {
+    return dateObj.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } else {
+    return dateObj.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+};
+
+// 获取返回博客列表的链接
+const blogListPath = getLocalizedPath('/blog', currentLang);
+---
+
+<Layout title={post.data.title} description={post.data.excerpt}>
+  <article class="prose max-w-none">
+    <!-- 文章头部 -->
+    <header class="mb-8">
+      <!-- 返回链接 -->
+      <nav class="mb-6">
+        <a 
+          href={blogListPath} 
+          class="btn btn-sm btn-ghost gap-2 no-underline"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="w-4 h-4"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" 
+            />
+          </svg>
+          {t('common.back')}
+        </a>
+      </nav>
+      
+      <!-- 文章标题 -->
+      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
+      
+      <!-- 文章元信息 -->
+      <div class="flex flex-wrap gap-4 items-center text-sm text-base-content/70 mb-6">
+        <time datetime={post.data.date}>
+          {formatDate(post.data.date)}
+        </time>
+        
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex gap-2">
+            {post.data.tags.map((tag: string) => (
+              <span class="badge badge-outline">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      <!-- 文章摘要 -->
+      {post.data.excerpt && (
+        <div class="text-lg text-base-content/80 italic border-l-4 border-accent pl-4 mb-8">
+          {post.data.excerpt}
+        </div>
+      )}
+    </header>
+    
+    <!-- 文章内容 -->
+    <div class="prose-content">
+      <Content />
+    </div>
+    
+    <!-- 文章底部 -->
+    <footer class="mt-12 pt-8 border-t border-base-300">
+      <div class="flex justify-between items-center">
+        <a 
+          href={blogListPath} 
+          class="btn btn-secondary gap-2"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="w-4 h-4"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" 
+            />
+          </svg>
+          {t('common.back')}
+        </a>
+        
+        <!-- 分享按钮（可选） -->
+        <div class="flex gap-2">
+          <!-- 这里可以添加分享功能 -->
+        </div>
+      </div>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  /* 确保文章内容的样式正确 */
+  .prose-content {
+    @apply prose prose-lg max-w-none;
+  }
+  
+  /* 深色模式适配 */
+  .dark .prose-content {
+    @apply prose-invert;
+  }
+</style>

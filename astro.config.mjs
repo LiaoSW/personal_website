@@ -14,8 +14,8 @@ export default defineConfig({
     site: template.website_url,
     base: template.base,
     i18n: {
-        defaultLocale: "en",
-        locales: ["en", "zh"],
+        defaultLocale: "zh",
+        locales: ["zh", "en"],
         routing: {
             prefixDefaultLocale: false
         }

@@ -1,0 +1,56 @@
+---
+// 首页组件 - 统一处理中英文版本
+import Layout from '../../layouts/Layout.astro'
+import { profile } from '@/settings'
+import { publications } from '@/data/cv'
+import ProfilePictures from '@/assets/profile_pictures.jpg'
+import Hero from '@/components/ui/Hero.astro'
+import Grid from '@/components/ui/Grid.astro'
+import ArticleList from '@/components/ui/ArticleList.astro'
+import { getCurrentLang, useTranslations } from '../../i18n/utils'
+
+// 动态获取当前语言
+const currentLang = getCurrentLang(Astro);
+const t = useTranslations(currentLang);
+const { fullName, title, institute, research_areas, description } = profile[currentLang]
+
+// 获取最新发表的论文（前3篇）
+const recentPublications = publications.slice(0, 3).map(pub => ({
+  title: pub.title,
+  journal: pub.journal,
+  time: pub.time
+}))
+---
+
+<Layout title={fullName} description={description}>
+  <div>
+    <!-- 英雄区域 -->
+    <Hero
+      fullName={fullName}
+      title={title}
+      institute={institute}
+      description={description}
+      profilePicture={ProfilePictures}
+    />
+
+    <!-- 研究领域 -->
+    {research_areas && research_areas.length > 0 && (
+      <div class="mt-16">
+        <Grid
+          gridTitle={t('home.research_areas')}
+          gridItems={research_areas}
+        />
+      </div>
+    )}
+
+    <!-- 最新发表 -->
+    {recentPublications.length > 0 && (
+      <div class="mt-16">
+        <ArticleList
+          listTitle={t('home.recent_publications')}
+          listItems={recentPublications}
+        />
+      </div>
+    )}
+  </div>
+</Layout>

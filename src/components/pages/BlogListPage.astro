@@ -1,0 +1,85 @@
+---
+// 博客列表页面组件 - 统一处理中英文版本
+import Pagination from '@/components/ui/Pagination.astro'
+import Layout from '@/layouts/Layout.astro'
+import { trimExcerpt } from '@/lib/utils'
+import { template } from '@/settings'
+import { getCurrentLang, useTranslations, getLocalizedPath } from '../../i18n/utils'
+
+// 接收页面数据作为props
+interface Props {
+  page: any; // Astro分页对象
+}
+
+const { page } = Astro.props;
+
+// 动态获取当前语言
+const currentLang = getCurrentLang(Astro);
+const t = useTranslations(currentLang);
+
+// 根据语言格式化日期
+const formatDate = (date: string) => {
+  const dateObj = new Date(date);
+  if (currentLang === 'zh') {
+    return dateObj.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } else {
+    return dateObj.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+};
+---
+
+<Layout title={t('page.blog')} description={t('blog.description')}>
+  <div>
+    <h1 class="text-3xl font-bold mb-8">{t('blog.title')}</h1>
+    
+    <!-- 博客文章列表 -->
+    <div class="grid gap-8">
+      {page.data.map((post: any) => (
+        <article class="card bg-base-200 transition-all hover:shadow-lg">
+          <div class="card-body">
+            <div class="flex justify-between items-start">
+              <h2 class="card-title text-xl">
+                <a href={post.slug} class="hover:text-accent transition-colors">
+                  {post.title}
+                </a>
+              </h2>
+              <div class="badge badge-accent badge-outline p-4">
+                {post.badge}
+              </div>
+            </div>
+            
+            <time datetime={post.date} class="text-sm text-base-content/70">
+              {formatDate(post.date)}
+            </time>
+            
+            <p class="mt-4 text-base-content/80">{post.excerpt}</p>
+            
+            <div class="card-actions justify-end mt-4">
+              <a
+                href={post.slug}
+                class="btn btn-sm btn-secondary text-secondary-content"
+              >
+                {t('common.read_more')}
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- 分页 -->
+    {page.lastPage > 1 && (
+      <div class="flex justify-center mt-8">
+        <Pagination page={page} />
+      </div>
+    )}
+  </div>
+</Layout>
