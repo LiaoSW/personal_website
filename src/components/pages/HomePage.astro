@@ -1,8 +1,7 @@
 ---
 // 首页组件 - 统一处理中英文版本
 import Layout from '../../layouts/Layout.astro'
-import { profile } from '@/settings'
-import { publications } from '@/data/cv'
+import { getProfile, getPapers } from '../../data/content'
 import ProfilePictures from '@/assets/profile_pictures.jpg'
 import Hero from '@/components/ui/Hero.astro'
 import Grid from '@/components/ui/Grid.astro'
@@ -12,13 +11,18 @@ import { getCurrentLang, useTranslations } from '../../i18n/utils'
 // 动态获取当前语言
 const currentLang = getCurrentLang(Astro);
 const t = useTranslations(currentLang);
-const { fullName, title, institute, research_areas, description } = profile[currentLang]
 
-// 获取最新发表的论文（前3篇）
-const recentPublications = publications.slice(0, 3).map(pub => ({
+// 获取当前语言的数据
+const profileData = getProfile(currentLang);
+const papersData = getPapers(currentLang);
+const { fullName, title, institute, research_areas, description } = profileData;
+
+// 获取最新发表的论文（前3篇）- 优先显示特色论文，然后是期刊论文
+const allPapers = [...papersData.featured, ...papersData.journals];
+const recentPublications = allPapers.slice(0, 3).map(pub => ({
   title: pub.title,
   journal: pub.journal,
-  time: pub.time
+  time: pub.year || pub.time
 }))
 ---
 

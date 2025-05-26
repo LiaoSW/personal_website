@@ -2,7 +2,7 @@
 // 论文页面组件 - 统一处理中英文版本
 import Layout from '../../layouts/Layout.astro'
 import PublicationsList from '../../components/ui/PublicationsList.astro'
-import { publications } from '../../data/cv'
+import { getPapers, getProfile } from '../../data/content'
 import { highlightAuthor } from '../../lib/utils'
 import { template } from '../../settings'
 import { getCurrentLang, useTranslations } from '../../i18n/utils'
@@ -11,15 +11,24 @@ import { getCurrentLang, useTranslations } from '../../i18n/utils'
 const currentLang = getCurrentLang(Astro);
 const t = useTranslations(currentLang);
 
-// 论文数据处理
-const ALL_PAPERS = publications;
+// 获取当前语言的论文数据
+const papersData = getPapers(currentLang);
+const profileData = getProfile(currentLang);
+
+// 合并所有论文数据
+const ALL_PAPERS = [
+  ...papersData.featured,
+  ...papersData.journals,
+  ...papersData.conferences,
+  ...papersData.patents
+];
 ---
 
 <Layout title={t('page.papers')} description={t('papers.description')}>
   <div class="prose max-w-none">
     <h1 class="text-3xl font-bold mb-8">{t('papers.title')}</h1>
     <p class="text-lg mb-12">{t('papers.description')}</p>
-    
+
     <!-- 使用统一的发表列表组件 -->
     <PublicationsList elements={ALL_PAPERS} />
   </div>

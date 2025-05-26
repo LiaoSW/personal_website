@@ -1,23 +1,23 @@
+// 注意：profile 数据已迁移到 src/data/content/profile.ts
+// 为了保持向后兼容性，这里保留一个简化版本
+// 建议使用 getProfile() 函数从新的数据源获取完整的个人资料信息
+
 export const profile = {
 	en: {
 		fullName: 'LIAO Shiwu',
-		title: 'Ph.D. & Founder of TODE Co., Ltd.',
+		title: 'Ph.D., Researcher & Founder of TODE Co., Ltd.',
 		institute: 'TODE Co., Ltd. & Huazhong University of Science & Technology',
-		author_name: 'Shiwu Liao', // Author name to be highlighted in the papers section
-		description: 'Brief impactful description of your research focus and academic mission. Highlight your key contributions and areas of expertise.',
-		research_areas: [
-			// { title: 'Physics', description: 'Brief description of the research interest', field: 'physics' },
-		],
+		author_name: 'Shiwu Liao',
+		description: 'Focused on modern power system planning and operation analysis, dedicated to promoting clean energy technology development and smart grid construction',
+		research_areas: [],
 	},
 	zh: {
 		fullName: '廖诗武',
 		title: '博士，研究员，TODE Co., Ltd. 创始人',
 		institute: 'TODE Co., Ltd. & 华中科技大学',
-		author_name: 'Shiwu Liao', // Author name to be highlighted in the papers section
-		description: '研究领域：新型电力系统规划及运行分析',
-		research_areas: [
-			// { title: '物理学', description: '研究兴趣的简要描述', field: 'physics' },
-		],
+		author_name: 'Shiwu Liao',
+		description: '专注于新型电力系统规划及运行分析，致力于推动清洁能源技术发展和智能电网建设',
+		research_areas: [],
 	}
 }
 

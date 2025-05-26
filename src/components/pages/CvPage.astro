@@ -1,44 +1,52 @@
 ---
 // 简历页面组件 - 统一处理中英文版本
 import Layout from '@/layouts/Layout.astro'
-import { experiences, education, skills, publications } from '../../data/cv'
+import { getCV, type CVItem, type Publication, type Skill } from '../../data/content'
 import CvTimeline from '@/components/ui/CvTimeline.astro'
 import List from '@/components/ui/List.astro'
 import PublicationsList from '@/components/ui/PublicationsList.astro'
 import { getCurrentLang, useTranslations } from '../../i18n/utils'
 
-import type { Experience, Education, Publication } from '../../types/cv'
-
 // 动态获取当前语言
 const currentLang = getCurrentLang(Astro);
 const t = useTranslations(currentLang);
 
-// 数据排序处理
-let orderedExperiences: Experience[] = []
-let orderedEducations: Education[] = []
+// 获取当前语言的CV数据
+const cvData = getCV(currentLang);
+const { experiences, education, skills, publications } = cvData;
+
+// 数据排序处理 - 将时间字符串转换为可比较的格式
+function parseTimeString(timeStr: string): number {
+  // 提取年份进行排序，格式如 "2017.8 - 2021.4" 或 "2012.9 - 2017.6"
+  const startYear = timeStr.split(' - ')[0].split('.')[0];
+  return parseInt(startYear) || 0;
+}
+
+let orderedExperiences: CVItem[] = []
+let orderedEducations: CVItem[] = []
 let orderedPublications: Publication[] = []
 
 if (experiences) {
   orderedExperiences = experiences.sort((a, b) => {
-    const dateA = new Date(a.startDate).getTime()
-    const dateB = new Date(b.startDate).getTime()
-    return dateB - dateA
+    const dateA = parseTimeString(a.time)
+    const dateB = parseTimeString(b.time)
+    return dateB - dateA // 按时间倒序排列
   })
 }
 
 if (education) {
   orderedEducations = education.sort((a, b) => {
-    const dateA = new Date(a.startDate).getTime()
-    const dateB = new Date(b.startDate).getTime()
-    return dateB - dateA
+    const dateA = parseTimeString(a.time)
+    const dateB = parseTimeString(b.time)
+    return dateB - dateA // 按时间倒序排列
   })
 }
 
 if (publications) {
   orderedPublications = publications.sort((a, b) => {
-    const dateA = new Date(a.time).getTime()
-    const dateB = new Date(b.time).getTime()
-    return dateB - dateA
+    const yearA = parseInt(a.time) || 0
+    const yearB = parseInt(b.time) || 0
+    return yearB - yearA // 按年份倒序排列
   })
 }
 ---
@@ -46,7 +54,7 @@ if (publications) {
 <Layout title={t('page.cv')} description={t('cv.description')}>
   <div>
     <h1 class="text-3xl font-bold mb-8">{t('cv.title')}</h1>
-    
+
     <!-- 工作经历 -->
     {orderedExperiences.length > 0 && (
       <div class="mb-12">
@@ -54,7 +62,7 @@ if (publications) {
         <CvTimeline elements={orderedExperiences} />
       </div>
     )}
-    
+
     <!-- 教育背景 -->
     {orderedEducations.length > 0 && (
       <div class="mb-12">
@@ -62,7 +70,7 @@ if (publications) {
         <CvTimeline elements={orderedEducations} />
       </div>
     )}
-    
+
     <!-- 技能 -->
     {skills && skills.length > 0 && (
       <div class="mb-12">
@@ -70,7 +78,7 @@ if (publications) {
         <List listTitle="" listItems={skills} />
       </div>
     )}
-    
+
     <!-- 发表论文 -->
     {orderedPublications.length > 0 && (
       <div class="mb-12">

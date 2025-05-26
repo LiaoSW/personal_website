@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import {profile} from '../../settings'
+import { getProfile } from '../../data/content'
 import SocialIcons from './SocialIcons.astro'
 import ProfilePictures from '@/assets/profile_pictures.jpg'
 import { getCollection } from 'astro:content'
@@ -10,7 +10,7 @@ import { getLangFromUrl, useTranslations } from '../../i18n/utils'
 const isBlogPopulated = await getCollection('blog').then(collection => collection.length > 0).catch(() => false)
 
 const currentLang = getLangFromUrl(Astro.url);
-const currentProfile = profile[currentLang];
+const currentProfile = getProfile(currentLang);
 const t = useTranslations(currentLang);
 
 const {fullName, title} = currentProfile
@@ -26,7 +26,7 @@ const {fullName, title} = currentProfile
 					src={ProfilePictures}
 					alt={`Profile picture of ${fullName}`}
 				/>
-				<h1 class="text-lg font-black mt-8 hidden lg:block">{title} <span>{fullName}</span></h1>
+				<h1 class="text-lg font-black mt-8 hidden lg:block"><span>{fullName}</span> {title}</h1>
 			</div>
 			<div class='mx-4 mt-16'>
 				<ul class='space-y-4 menu grow shrink menu-md overflow-y-auto'>
