@@ -1,10 +1,10 @@
 export const experiences = [
 	{
-		company: '',
-		time: '',
-		title: '',
-		location: '',
-		description: '',
+		company: 'State Grid Jiangsu Electric Power Research Institute',
+		time: '2017.8 - 2021.4',
+		title: 'Senior Engineer',
+		location: 'Nanjing, Jiangsu, China',
+		description: 'Core researcher and analyst in the field of power system planning and operation',
 	},
 	// {
 	// 	company: 'Radium Institute (Institut du Radium)',
@@ -17,10 +17,24 @@ export const experiences = [
 
 export const education = [
 	{
-		school: '',
-		time: '',
-		degree: '',
-		location: '',
+		school: 'Huazhong University of Science & Technology',
+		time: '2008.9 - 2012.6',
+		degree: 'Bachelor of Engineering',
+		location: 'Wuhan, Hubei, China',
+		description: '',
+	},
+		{
+		school: 'Huazhong University of Science & Technology',
+		time: '20012.9 - 2017.6',
+		degree: 'Ph.D.',
+		location: 'Wuhan, Hubei, China',
+		description: '',
+	},
+			{
+		school: 'Harvard University',
+		time: '2015.9 - 2016.8',
+		degree: 'Research Fellow',
+		location: 'Cambridge, MA, USA',
 		description: '',
 	},
 	// {
@@ -34,7 +48,7 @@ export const education = [
 
 export const skills = [
 	{
-		title: '',
+		title: 'Power system planning and operation',
 		description: '',
 	},
 	// {
